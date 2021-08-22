@@ -25,7 +25,7 @@
 </template>
 <script>
 export default {
-  name: "pokemon-card",
+  name: "pokemon-evolution-details",
   props: {
     species: {
       type: Object,
@@ -38,24 +38,21 @@ export default {
   }),
   methods: {
     getEvolutions() {
+      this.evolutions = [];
       let evolutionChainId = this.species.evolution_chain.url.replace(
         this.$api + "/evolution-chain/",
         ""
       );
       this.isLoading = true;
-      this.$http
-        .get("/api/evolution-chain/" + evolutionChainId)
-        .then((response) => {
-          this.evolutions.push(response.data.chain.species);
-          let evolvesTo = response.data.chain.evolves_to;
-          while (evolvesTo.length > 0) {
-            this.evolutions.push(evolvesTo[0].species);
-            if (evolvesTo[0].evolves_to.length !== undefined)
-              evolvesTo = evolvesTo[0].evolves_to;
-          }
-          console.log(this.evolutions);
-        })
-        .catch((error) => console.log(error));
+      this.$http.get("/api/evolution-chain/" + evolutionChainId).then((response) => {
+        this.evolutions.push(response.data.chain.species);
+        let evolvesTo = response.data.chain.evolves_to;
+        while (evolvesTo.length > 0) {
+          this.evolutions.push(evolvesTo[0].species);
+          if (evolvesTo[0].evolves_to.length !== undefined)
+            evolvesTo = evolvesTo[0].evolves_to;
+        }
+      });
     },
   },
   watch: {

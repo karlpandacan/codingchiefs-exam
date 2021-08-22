@@ -11,10 +11,16 @@
         xl="3"
         lg="3"
       >
-        <v-card @click="redirectTo()">
+        <v-card
+          :to="{
+            name: 'pokemon-view',
+            params: { pokemon: pokemon.name },
+            query: { page: currentPage },
+          }"
+        >
           <v-img max-height="300" min-height="150" :src="images[pokemon.name] || ''" />
           <v-card-title class="text-xl-center">
-            <p class="text-capitalize" v-html="pokemon.name"></p>
+            <p class="text-capitalize" v-html="pokemon.name.replaceAll('-', ' ')"></p>
           </v-card-title>
         </v-card>
       </v-col>
@@ -33,16 +39,16 @@ export default {
       required: true,
       deafult: () => [{ name: "", url: "" }],
     },
+    currentPage: {
+      type: Number,
+      required: true,
+      default: 1,
+    },
   },
   data: () => ({
     isLoading: false,
   }),
   methods: {
-    redirectTo(url) {
-      let images = this.images;
-      this.images = [];
-      this.images = images;
-    },
     async getImage(url) {
       await this.$http.get(url).then((response) => {
         this.images[response.data.name] = response.data.sprites.front_default;
@@ -70,24 +76,6 @@ export default {
         }
       });
       return images;
-    },
-    cardWidth() {
-      let width = "";
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          width = "100%";
-          break;
-        case "sm":
-          width = "49%";
-          break;
-        case "md":
-          width = "30%";
-          break;
-        default:
-          width = "20%";
-          break;
-      }
-      return width;
     },
   },
 };

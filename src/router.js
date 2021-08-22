@@ -41,22 +41,8 @@ let router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.isLoggedIn) {
-      store.dispatch('checkSession').then(() => {
-        document.title = process.env.VUE_APP_TITLE + ' - ' + to.meta.title
-        next()
-      }).catch(() => {
-        store.dispatch('logout');
-        next('/')
-      })
-      return
-    }
-    next('/')
-  } else {
-    document.title = (process.env.VUE_APP_TITLE + ' - ' + to.meta.title)
-    next()
-  }
+  document.title = (process.env.VUE_APP_TITLE + ' - ' + to.meta.title)
+  next()
 })
 
 export default router

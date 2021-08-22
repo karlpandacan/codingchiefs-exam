@@ -1,6 +1,6 @@
 <template>
   <div>
-    <pokemon-card :pokemons="rows" />
+    <pokemon-card :pokemons="rows" :current-page="parseInt(pagination.current_page)" />
     <v-row class="justify-center align-center">
       <v-col>
         <v-pagination
@@ -88,7 +88,7 @@ export default {
           };
           this.pagination = pagination;
         })
-        .catch((error) => {
+        .catch(() => {
           this.alert.show = true;
         })
         .finally(() => {
@@ -100,6 +100,9 @@ export default {
     },
   },
   mounted() {
+    if (this.$route.query.page !== undefined) {
+      this.pagination.current_page = parseInt(this.$route.query.page);
+    }
     this.generate();
   },
 };

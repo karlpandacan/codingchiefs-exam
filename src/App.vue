@@ -3,14 +3,17 @@
     <v-main>
       <v-app-bar class="flex-grow-0" color="primary">
         <v-toolbar-title>Pokemon</v-toolbar-title>
-        <v-text-field
-          class="mx-3"
-          prepend-inner-icon="search"
-          v-model="searchText"
-          solo
-          hide-details
-          single-line
-        ></v-text-field>
+        <form @submit.prevent="submit">
+          <v-text-field
+            class="mx-3"
+            append-icon="search"
+            v-model="searchText"
+            solo
+            hide-details
+            single-line
+            @click:append="submit"
+          ></v-text-field>
+        </form>
         <v-spacer></v-spacer>
         <v-btn icon @click="toggleTheme">
           <v-icon>mdi-brightness-6</v-icon>
@@ -27,9 +30,11 @@ export default {
   data: () => ({
     isLoading: false,
     searchText: "",
-    drawer: true,
   }),
   methods: {
+    submit() {
+      this.$router.push("/" + this.searchText.toLowerCase().trim());
+    },
     toggleTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
       if (this.$vuetify.theme.dark) {

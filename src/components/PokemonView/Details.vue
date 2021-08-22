@@ -18,19 +18,19 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" class="text-capitalize">
           <b>Type:</b>
           <template v-for="(type, index) in pokemon.types">
-            {{ type.type.name }}
+            {{ type.type.name.replaceAll('-', ' ') }}
             <template v-if="pokemon.types.length - 1 != index">, </template>
           </template>
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" class="text-capitalize">
           <b>Abilities:</b>
           <template v-for="(ability, index) in pokemon.abilities">
-            {{ ability.ability.name }}
+            {{ ability.ability.name.replaceAll('-', ' ') }}
             <template v-if="pokemon.abilities.length - 1 != index">, </template>
           </template>
         </v-col>

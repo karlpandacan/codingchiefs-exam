@@ -1,36 +1,45 @@
 <template>
   <v-card>
-    <v-container v-if="pokemon.sprites !== undefined"> </v-container>
+    <v-container>
+      <h2>About</h2>
+      <template v-if="Object.keys(this.species).length > 0">
+        <p v-html="textEntries"></p>
+      </template>
+      <template v-else>
+        <p>No Data Found</p>
+      </template>
+    </v-container>
   </v-card>
 </template>
 <script>
 export default {
   name: "pokemon-view-about",
   props: {
-    pokemon: {
+    species: {
       type: Object,
       required: true,
       deafult: () => ({}),
     },
   },
   data: () => ({
-    flavorTextEntries: "",
+    textEntries: "",
   }),
-  methods: {
-    getFlavorTextEntries() {
-        this.isLoading = true;
-        this.$http
-          .get("/api/pokemon-species/" + this.pokemon.id)
-          .then((response) => {
-          })
-          .catch((error) => console.log(error))
-    },
   watch: {
-    pokemon() {
-      if (this.pokemon.id !== undefined) {
-        this.getFlavorTextEntries();
+    species() {
+      if (Object.keys(this.species).length > 0) {
+        this.textEntries = "";
+        this.species.flavor_text_entries.forEach((elements, index) => {
+          if (elements.language.name == "en") {
+            this.textEntries += "&nbsp;" + elements.flavor_text;
+          }
+        });
       }
     },
-  }
+  },
 };
 </script>
+<style scoped>
+h2 {
+  color: #00539c;
+}
+</style>
